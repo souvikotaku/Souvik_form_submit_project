@@ -7,7 +7,7 @@ This is a simple form submit app that I made using React on the frontend and fir
 # Steps to use it:-
 Just fill up the form and submit it, you can see the details that you filled in the table below. You can also search for a specific entry in the table by searching for it in the search bar, it will search in realtime while you type. 
 
-#Technologies Used:-
+# Technologies Used:-
 ReactJs, Firebase realtime database, Bootstrap and AntDesign
 
 # Getting Started with Create React App
