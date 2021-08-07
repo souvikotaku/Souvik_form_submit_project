@@ -1,6 +1,9 @@
 # Form submit app:-
 This is a simple form submit app that I made using React on the frontend and firebase on the backend for interview task purpose. 
 
+# Check out th live app here
+# https://souvik-formsubmit-app.netlify.app/
+
 # Steps to use it:-
 Just fill up the form and submit it, you can see the details that you filled in the table below. You can also search for a specific entry in the table by searching for it in the search bar, it will search in realtime while you type. 
 
