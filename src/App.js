@@ -4,7 +4,8 @@ import "antd/dist/antd.css";
 import "./newStyle2.css";
 import "./tablestyle.css";
 import firebase from "./util/firebase";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { SortAscendingOutlined } from "@ant-design/icons";
 
 function App() {
   const [firstName, setFirstName] = useState("");
@@ -12,6 +13,9 @@ function App() {
   const [email, setEmail] = useState("");
   const [newFormdatas, setformdatas] = useState([]);
   const [form] = Form.useForm();
+
+  const inputOne = useRef();
+  const tableOne = useRef();
 
   useEffect(() => {
     const formRef = firebase.database().ref("formReact");
@@ -71,10 +75,15 @@ function App() {
 
   function myFunction() {
     var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
+    // input = document.getElementById("myInput");
+    input = inputOne.current;
     filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
+    // table = document.getElementById("myTable");
+    table = tableOne.current;
     tr = table.getElementsByTagName("tr");
+
+    // console.log(inputOne.current);
+
     for (i = 0; i < tr.length; i++) {
       td = tr[i].getElementsByTagName("td")[1];
       if (td) {
@@ -83,6 +92,69 @@ function App() {
           tr[i].style.display = "";
         } else {
           tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+  function sortTable(n) {
+    var table,
+      rows,
+      switching,
+      i,
+      x,
+      y,
+      shouldSwitch,
+      dir,
+      switchcount = 0;
+    table = tableOne.current;
+    switching = true;
+    // Set the sorting direction to ascending:
+    dir = "asc";
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < rows.length - 1; i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        x = rows[i].getElementsByTagName("TD")[n];
+        y = rows[i + 1].getElementsByTagName("TD")[n];
+        /* Check if the two rows should switch place,
+        based on the direction, asc or desc: */
+        if (dir == "asc") {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        // Each time a switch is done, increase this count by 1:
+        switchcount++;
+      } else {
+        /* If no switching has been done AND the direction is "asc",
+        set the direction to "desc" and run the while loop again. */
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
         }
       }
     }
@@ -198,7 +270,9 @@ function App() {
           onKeyUp={myFunction}
           placeholder="Search for names.."
           title="Type in a name"
+          ref={inputOne}
         />
+
         <div
           style={{
             width: "100%",
@@ -207,14 +281,23 @@ function App() {
             background: "#fff",
           }}
         >
-          <table id="myTable">
+          <table id="myTable" ref={tableOne}>
             <tbody>
               <tr className="header">
                 {/* <th style={{ width: "10%" }}>Sr No.</th> */}
-                <th style={{ width: "10%" }}>Sr No.</th>
-                <th style={{ width: "30%" }}>First Name</th>
-                <th style={{ width: "30%" }}>Last Name</th>
-                <th style={{ width: "30%" }}>Email</th>
+                <th style={{ width: "15%" }}>
+                  Sr No.
+                  <SortAscendingOutlined onClick={() => sortTable(0)} />
+                </th>
+                <th style={{ width: "32%" }}>
+                  First Name
+                  <SortAscendingOutlined onClick={() => sortTable(1)} />
+                </th>
+                <th style={{ width: "28%" }}>
+                  Last Name
+                  <SortAscendingOutlined onClick={() => sortTable(2)} />
+                </th>
+                <th style={{ width: "33%" }}>Email</th>
               </tr>
               {newFormdatas.map((item, index) => {
                 return (
